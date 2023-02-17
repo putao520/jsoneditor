@@ -40,7 +40,7 @@ export function appendNodeFactory (Node) {
 
     // a row for the append button
     const trAppend = document.createElement('tr')
-    trAppend.className = 'jsoneditor-append'
+    trAppend.className = 'jsoneditor-append faked'
     trAppend.node = this
     dom.tr = trAppend
 

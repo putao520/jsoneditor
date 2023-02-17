@@ -101,7 +101,7 @@ const compilerMinimalist = webpack({
 })
 
 function minify (name) {
-  const code = String(fs.readFileSync(DIST + '/' + name + '.js'))
+  const code = String(fs.readFileSync(DIST + '\\' + name + '.js'))
   const result = uglify.minify({ [name + '.js']: code }, {
     sourceMap: {
       url: name + '.map'

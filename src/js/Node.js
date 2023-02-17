@@ -293,13 +293,14 @@ export class Node {
 
       if (!tdError) {
         tdError = document.createElement('td')
+        tdError.className = 'faked'
         this.dom.tdError = tdError
         this.dom.tdValue.parentNode.appendChild(tdError)
       }
 
       const button = document.createElement('button')
       button.type = 'button'
-      button.className = 'jsoneditor-button jsoneditor-schema-error'
+      button.className = 'jsoneditor-button jsoneditor-schema-error faked'
 
       const destroy = () => {
         if (this.dom.popupAnchor) {
@@ -323,7 +324,7 @@ export class Node {
           : 'jsoneditor-left'
 
         const popover = document.createElement('div')
-        popover.className = 'jsoneditor-popover ' + position
+        popover.className = 'jsoneditor-popover faked ' + position
         popover.appendChild(document.createTextNode(error.message))
         this.dom.popupAnchor.appendChild(popover)
       }
@@ -781,7 +782,7 @@ export class Node {
     // set this node expanded
     this.expanded = true
     if (this.dom.expand) {
-      this.dom.expand.className = 'jsoneditor-button jsoneditor-expanded'
+      this.dom.expand.className = 'jsoneditor-button jsoneditor-expanded faked'
     }
 
     this.showChilds()
@@ -817,7 +818,7 @@ export class Node {
 
     // make this node collapsed
     if (this.dom.expand) {
-      this.dom.expand.className = 'jsoneditor-button jsoneditor-collapsed'
+      this.dom.expand.className = 'jsoneditor-button jsoneditor-collapsed faked'
     }
     this.expanded = false
 
@@ -1042,6 +1043,7 @@ export class Node {
       let trTemp
       if (tbody) {
         trTemp = document.createElement('tr')
+        trTemp.className = 'faked'
         trTemp.style.height = tbody.clientHeight + 'px'
         tbody.appendChild(trTemp)
       }
@@ -1667,7 +1669,7 @@ export class Node {
   _updateDomValue () {
     const domValue = this.dom.value
     if (domValue) {
-      const classNames = ['jsoneditor-value']
+      const classNames = ['jsoneditor-value', 'faked']
 
       // set text color depending on value type
       const value = this.value
@@ -1710,7 +1712,7 @@ export class Node {
           this.dom.checkbox = document.createElement('input')
           this.dom.checkbox.type = 'checkbox'
           this.dom.tdCheckbox = document.createElement('td')
-          this.dom.tdCheckbox.className = 'jsoneditor-tree'
+          this.dom.tdCheckbox.className = 'jsoneditor-tree faked'
           this.dom.tdCheckbox.appendChild(this.dom.checkbox)
 
           this.dom.tdValue.parentNode.insertBefore(this.dom.tdCheckbox, this.dom.tdValue)
@@ -1730,12 +1732,14 @@ export class Node {
       if (this.enum && this.editable.value) {
         if (!this.dom.select) {
           this.dom.select = document.createElement('select')
+          this.dom.select.className = 'faked'
           this.id = this.field + '_' + new Date().getUTCMilliseconds()
           this.dom.select.id = this.id
           this.dom.select.name = this.dom.select.id
 
           // Create the default empty option
           const defaultOption = document.createElement('option')
+          defaultOption.className = 'faked'
           defaultOption.value = ''
           defaultOption.textContent = '--'
           this.dom.select.appendChild(defaultOption)
@@ -1744,7 +1748,7 @@ export class Node {
           this._updateEnumOptions()
 
           this.dom.tdSelect = document.createElement('td')
-          this.dom.tdSelect.className = 'jsoneditor-tree'
+          this.dom.tdSelect.className = 'jsoneditor-tree faked'
           this.dom.tdSelect.appendChild(this.dom.select)
           this.dom.tdValue.parentNode.insertBefore(this.dom.tdSelect, this.dom.tdValue)
         }
@@ -1787,10 +1791,10 @@ export class Node {
           isValidColor(value)) {
         if (!this.dom.color) {
           this.dom.color = document.createElement('div')
-          this.dom.color.className = 'jsoneditor-color'
+          this.dom.color.className = 'jsoneditor-color faked'
 
           this.dom.tdColor = document.createElement('td')
-          this.dom.tdColor.className = 'jsoneditor-tree'
+          this.dom.tdColor.className = 'jsoneditor-tree faked'
           this.dom.tdColor.appendChild(this.dom.color)
 
           this.dom.tdValue.parentNode.insertBefore(this.dom.tdColor, this.dom.tdValue)
@@ -1813,7 +1817,7 @@ export class Node {
       if (this._showTimestampTag()) {
         if (!this.dom.date) {
           this.dom.date = document.createElement('div')
-          this.dom.date.className = 'jsoneditor-date'
+          this.dom.date.className = 'jsoneditor-date faked'
           this.dom.value.parentNode.appendChild(this.dom.date)
         }
 
@@ -1862,6 +1866,7 @@ export class Node {
       const option = document.createElement('option')
       option.value = this.enum[i]
       option.textContent = this.enum[i]
+      option.className = 'faked'
       this.dom.select.appendChild(option)
     }
   }
@@ -2054,17 +2059,19 @@ export class Node {
 
     // create row
     dom.tr = document.createElement('tr')
+    dom.tr.className = 'faked'
     dom.tr.node = this
 
     if (this.editor.options.mode === 'tree') { // note: we take here the global setting
       const tdDrag = document.createElement('td')
+      tdDrag.className = 'faked'
       if (this.editable.field) {
         // create draggable area
         if (this.parent) {
           const domDrag = document.createElement('button')
           domDrag.type = 'button'
           dom.drag = domDrag
-          domDrag.className = 'jsoneditor-button jsoneditor-dragarea'
+          domDrag.className = 'jsoneditor-button jsoneditor-dragarea faked'
           domDrag.title = translate('drag')
           tdDrag.appendChild(domDrag)
         }
@@ -2073,10 +2080,11 @@ export class Node {
 
       // create context menu
       const tdMenu = document.createElement('td')
+      tdMenu.className = 'faked'
       const menu = document.createElement('button')
       menu.type = 'button'
       dom.menu = menu
-      menu.className = 'jsoneditor-button jsoneditor-contextmenu-button'
+      menu.className = 'jsoneditor-button jsoneditor-contextmenu-button faked'
       menu.title = translate('actionsMenu')
       tdMenu.appendChild(dom.menu)
       dom.tr.appendChild(tdMenu)
@@ -2084,6 +2092,7 @@ export class Node {
 
     // create tree and field
     const tdField = document.createElement('td')
+    tdField.className = 'faked'
     dom.tr.appendChild(tdField)
     dom.tree = this._createDomTree()
     tdField.appendChild(dom.tree)
@@ -2125,7 +2134,9 @@ export class Node {
    * @private
    */
   _createDomField () {
-    return document.createElement('div')
+    const r = document.createElement('div')
+    r.className = 'faked'
+    return r
   }
 
   /**
@@ -2237,11 +2248,11 @@ export class Node {
         // parent is an object
         domField.contentEditable = this.editable.field
         domField.spellcheck = false
-        domField.className = 'jsoneditor-field'
+        domField.className = 'jsoneditor-field faked'
       } else {
         // parent is an array this is the root node
         domField.contentEditable = false
-        domField.className = 'jsoneditor-readonly'
+        domField.className = 'jsoneditor-readonly faked'
       }
 
       let fieldText
@@ -2434,6 +2445,7 @@ export class Node {
       }
     }
 
+    domValue.className = 'faked'
     return domValue
   }
 
@@ -2448,11 +2460,11 @@ export class Node {
     expand.type = 'button'
     if (this._hasChilds()) {
       expand.className = this.expanded
-        ? 'jsoneditor-button jsoneditor-expanded'
-        : 'jsoneditor-button jsoneditor-collapsed'
+        ? 'jsoneditor-button jsoneditor-expanded faked'
+        : 'jsoneditor-button jsoneditor-collapsed faked'
       expand.title = translate('expandTitle')
     } else {
-      expand.className = 'jsoneditor-button jsoneditor-invisible'
+      expand.className = 'jsoneditor-button jsoneditor-invisible faked'
       expand.title = ''
     }
 
@@ -2468,15 +2480,18 @@ export class Node {
     const dom = this.dom
     const domTree = document.createElement('table')
     const tbody = document.createElement('tbody')
+    tbody.className = 'faked'
     domTree.style.borderCollapse = 'collapse' // TODO: put in css
-    domTree.className = 'jsoneditor-values'
+    domTree.className = 'jsoneditor-values faked'
     domTree.appendChild(tbody)
     const tr = document.createElement('tr')
+    tr.className = 'faked'
     tbody.appendChild(tr)
+
 
     // create expand button
     const tdExpand = document.createElement('td')
-    tdExpand.className = 'jsoneditor-tree'
+    tdExpand.className = 'jsoneditor-tree faked'
     tr.appendChild(tdExpand)
     dom.expand = this._createDomExpandButton()
     tdExpand.appendChild(dom.expand)
@@ -2484,7 +2499,7 @@ export class Node {
 
     // create the field
     const tdField = document.createElement('td')
-    tdField.className = 'jsoneditor-tree'
+    tdField.className = 'jsoneditor-tree faked'
     tr.appendChild(tdField)
     dom.field = this._createDomField()
     tdField.appendChild(dom.field)
@@ -2492,17 +2507,17 @@ export class Node {
 
     // create a separator
     const tdSeparator = document.createElement('td')
-    tdSeparator.className = 'jsoneditor-tree'
+    tdSeparator.className = 'jsoneditor-tree faked'
     tr.appendChild(tdSeparator)
     if (this.type !== 'object' && this.type !== 'array') {
       tdSeparator.appendChild(document.createTextNode(':'))
-      tdSeparator.className = 'jsoneditor-separator'
+      tdSeparator.className = 'jsoneditor-separator faked'
     }
     dom.tdSeparator = tdSeparator
 
     // create the value
     const tdValue = document.createElement('td')
-    tdValue.className = 'jsoneditor-tree'
+    tdValue.className = 'jsoneditor-tree faked'
     tr.appendChild(tdValue)
     dom.value = this._createDomValue()
     tdValue.appendChild(dom.value)

@@ -218,7 +218,10 @@ treemode.set = function (json) {
 
     // expand
     const recurse = false
-    this.node.expand(recurse)
+
+    if( this.options.expandedOnStart === undefined || this.options.expandedOnStart === true){
+      this.node.expand(recurse)
+    }
 
     this.content.appendChild(this.table) // Put the table online again
   }

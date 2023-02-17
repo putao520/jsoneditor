@@ -14,6 +14,82 @@ export function createAbsoluteAnchor (anchor, parent, onDestroy, destroyOnMouseO
   const eventListeners = {}
 
   const anchorRect = anchor.getBoundingClientRect()
+  // const parentRect = parent.getBoundingClientRect()
+
+  const absoluteAnchor = document.createElement('div')
+  absoluteAnchor.className = 'jsoneditor-anchor'
+  absoluteAnchor.style.position = 'absolute'
+  absoluteAnchor.style.left = anchorRect.left + 'px'
+  absoluteAnchor.style.top = anchorRect.top + 'px'
+  absoluteAnchor.style.width = (anchorRect.width - 2) + 'px'
+  absoluteAnchor.style.height = (anchorRect.height - 2) + 'px'
+  absoluteAnchor.style.boxSizing = 'border-box'
+  absoluteAnchor.style.zIndex = '99999'
+  // 绝对锚点插入Body
+  document.body.appendChild(absoluteAnchor)
+
+  function destroy () {
+    // remove temporary absolutely positioned anchor
+    if (absoluteAnchor && absoluteAnchor.parentNode) {
+      absoluteAnchor.parentNode.removeChild(absoluteAnchor)
+
+      // remove all event listeners
+      // all event listeners are supposed to be attached to document.
+      for (const name in eventListeners) {
+        if (hasOwnProperty(eventListeners, name)) {
+          const fn = eventListeners[name]
+          if (fn) {
+            removeEventListener(root, name, fn)
+          }
+          delete eventListeners[name]
+        }
+      }
+
+      if (typeof onDestroy === 'function') {
+        onDestroy(anchor)
+      }
+    }
+  }
+
+  function isOutside (target) {
+    return (target !== absoluteAnchor) && !isChildOf(target, absoluteAnchor)
+  }
+
+  // create and attach event listeners
+  function destroyIfOutside (event) {
+    if (isOutside(event.target)) {
+      destroy()
+    }
+  }
+
+  eventListeners.mousedown = addEventListener(root, 'mousedown', destroyIfOutside)
+  eventListeners.mousewheel = addEventListener(root, 'mousewheel', destroyIfOutside)
+
+  if (destroyOnMouseOut) {
+    let destroyTimer = null
+
+    absoluteAnchor.onmouseover = () => {
+      clearTimeout(destroyTimer)
+      destroyTimer = null
+    }
+
+    absoluteAnchor.onmouseout = () => {
+      if (!destroyTimer) {
+        destroyTimer = setTimeout(destroy, 200)
+      }
+    }
+  }
+
+  absoluteAnchor.destroy = destroy
+
+  return absoluteAnchor
+}
+/*
+export function createAbsoluteAnchor (anchor, parent, onDestroy, destroyOnMouseOut = false) {
+  const root = getRootNode(anchor)
+  const eventListeners = {}
+
+  const anchorRect = anchor.getBoundingClientRect()
   const parentRect = parent.getBoundingClientRect()
 
   const absoluteAnchor = document.createElement('div')
@@ -82,6 +158,7 @@ export function createAbsoluteAnchor (anchor, parent, onDestroy, destroyOnMouseO
 
   return absoluteAnchor
 }
+ */
 
 /**
  * Node.getRootNode shim

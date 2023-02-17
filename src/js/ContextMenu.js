@@ -248,6 +248,73 @@ export class ContextMenu {
     if (this.limitHeight) {
       const margin = 10 // make sure there is a little margin left
       const maxPossibleMenuHeight = showBelow
+          ? frameRect.bottom - anchorRect.bottom - margin
+          : anchorRect.top - frameRect.top - margin
+      this.dom.list.style.maxHeight = maxPossibleMenuHeight + 'px'
+      this.dom.list.style.overflowY = 'auto'
+    }
+
+    // attach the menu to the temporary, absolute anchor
+    // parent.insertBefore(this.dom.root, anchor);
+    this.dom.absoluteAnchor.appendChild(this.dom.root)
+
+    // move focus to the first button in the context menu
+    this.selection = getSelection()
+    this.anchor = anchor
+    setTimeout(() => {
+      me.dom.focusButton.focus()
+    }, 0)
+
+    if (ContextMenu.visibleMenu) {
+      ContextMenu.visibleMenu.hide()
+    }
+    ContextMenu.visibleMenu = this
+  }
+
+  /*
+  show (anchor, frame, ignoreParent) {
+    this.hide()
+
+    // determine whether to display the menu below or above the anchor
+    let showBelow = true
+    const parent = anchor.parentNode
+    const anchorRect = anchor.getBoundingClientRect()
+    const parentRect = parent.getBoundingClientRect()
+    const frameRect = frame.getBoundingClientRect()
+
+    const me = this
+    this.dom.absoluteAnchor = createAbsoluteAnchor(anchor, frame, () => {
+      me.hide()
+    })
+
+    if (anchorRect.bottom + this.maxHeight < frameRect.bottom) {
+      // fits below -> show below
+    } else if (anchorRect.top - this.maxHeight > frameRect.top) {
+      // fits above -> show above
+      showBelow = false
+    } else {
+      // doesn't fit above nor below -> show below
+    }
+
+    const topGap = ignoreParent ? 0 : (anchorRect.top - parentRect.top)
+
+    // position the menu
+    if (showBelow) {
+      // display the menu below the anchor
+      const anchorHeight = anchor.offsetHeight
+      this.dom.menu.style.left = '0'
+      this.dom.menu.style.top = topGap + anchorHeight + 'px'
+      this.dom.menu.style.bottom = ''
+    } else {
+      // display the menu above the anchor
+      this.dom.menu.style.left = '0'
+      this.dom.menu.style.top = ''
+      this.dom.menu.style.bottom = '0px'
+    }
+
+    if (this.limitHeight) {
+      const margin = 10 // make sure there is a little margin left
+      const maxPossibleMenuHeight = showBelow
         ? frameRect.bottom - anchorRect.bottom - margin
         : anchorRect.top - frameRect.top - margin
       this.dom.list.style.maxHeight = maxPossibleMenuHeight + 'px'
@@ -270,7 +337,7 @@ export class ContextMenu {
     }
     ContextMenu.visibleMenu = this
   }
-
+  * */
   /**
    * Hide the context menu if visible
    */
